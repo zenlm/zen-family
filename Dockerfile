@@ -1,5 +1,5 @@
 # Multi-stage build for Zen AI Models
-FROM python:3.11-slim as builder
+FROM python:3.14-slim as builder
 
 # Install build dependencies
 RUN apt-get update && apt-get install -y \
@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir -U pip setuptools wheel && \
     pip install --no-cache-dir -r requirements_docker.txt
 
 # Production stage
-FROM python:3.11-slim
+FROM python:3.14-slim
 
 # Install runtime dependencies
 RUN apt-get update && apt-get install -y \
@@ -35,7 +35,7 @@ RUN useradd -m -u 1000 zen && \
 WORKDIR /app
 
 # Copy Python packages from builder
-COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /usr/local/lib/python3.14/site-packages /usr/local/lib/python3.14/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
 
 # Copy application code
