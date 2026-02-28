@@ -1,0 +1,98 @@
+version: '3.8'
+
+services:
+  # Zen Model Serving API
+  zen-api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: zen-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/app/models
+      - ./modelfiles:/app/modelfiles
+      - ./output:/app/output
+    environment:
+      - MODEL_PATH=/app/models
+      - LOG_LEVEL=info
+      - CUDA_VISIBLE_DEVICES=0
+    networks:
+      - zen-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.zen-api.rule=Host(`api.localhost`)"
+      - "traefik.http.services.zen-api.loadbalancer.server.port=8000"
+
+  # Zen WebUI
+  zen-ui:
+    image: node:20-alpine
+    container_name: zen-ui
+    working_dir: /app
+    command: sh -c "npm install && npm run dev"
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./ui:/app
+    environment:
+      - API_URL=http://zen-api:8000
+      - NODE_ENV=development
+    networks:
+      - zen-network
+    depends_on:
+      - zen-api
+
+  # Ollama for local model serving
+  ollama:
+    image: ollama/ollama:latest
+    container_name: zen-ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+      - ./models:/models
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+    networks:
+      - zen-network
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  # Traefik Proxy
+  traefik:
+    image: traefik:v3.0
+    container_name: zen-traefik
+    restart: unless-stopped
+    command:
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--providers.docker.network=zen-network"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik:/etc/traefik
+    networks:
+      - zen-network
+    labels:
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.localhost`)"
+      - "traefik.http.routers.dashboard.service=api@internal"
+
+networks:
+  zen-network:
+    driver: bridge
+
+volumes:
+  ollama-data:

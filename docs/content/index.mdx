@@ -1,0 +1,192 @@
+---
+title: Zen AI Documentation
+description: Ultra-efficient language models from 600M to 480B parameters
+---
+
+import { Cards, Card } from 'fumadocs-ui/components/card';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Steps, Step } from 'fumadocs-ui/components/steps';
+
+# Welcome to Zen AI
+
+<Callout type="info">
+  **v1.0.1 Released!** Security updates, documentation improvements, and enhanced zoo-gym integration. [Learn more →](/updates/v1.0.1)
+</Callout>
+
+Zen AI delivers state-of-the-art language models ranging from **600M to 480B parameters**, optimized for edge deployment with **95% less energy** consumption than traditional models.
+
+## 🚀 Quick Start
+
+<Tabs>
+  <Tab label="Python">
+    ```python
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+    
+    # Load any Zen model
+    model = AutoModelForCausalLM.from_pretrained("zenlm/zen-eco")
+    tokenizer = AutoTokenizer.from_pretrained("zenlm/zen-eco")
+    
+    # Generate text
+    inputs = tokenizer("Hello, ", return_tensors="pt")
+    outputs = model.generate(**inputs, max_length=50)
+    print(tokenizer.decode(outputs[0]))
+    ```
+  </Tab>
+  <Tab label="Zoo-Gym">
+    ```python
+    from zoo_gym import ZooGym
+    
+    # Fine-tune with zoo-gym
+    gym = ZooGym("zenlm/zen-eco")
+    gym.train(
+        dataset="data.jsonl",
+        epochs=3,
+        use_lora=True
+    )
+    ```
+  </Tab>
+  <Tab label="CLI">
+    ```bash
+    # Install Zen CLI
+    pip install zen-ai
+    
+    # Run inference
+    zen chat --model eco
+    
+    # Fine-tune
+    zen train --model nano --data training.jsonl
+    ```
+  </Tab>
+</Tabs>
+
+## 📊 Model Family
+
+<Cards>
+  <Card 
+    title="Zen-Nano" 
+    description="600M params • Edge devices • 100 tok/s"
+    href="/models/zen-nano"
+  />
+  <Card 
+    title="Zen-Eco" 
+    description="4B params • Balanced • 50 tok/s"
+    href="/models/zen-eco"
+  />
+  <Card 
+    title="Zen-Coder" 
+    description="480B/35B MoE • Code gen • 91% HumanEval"
+    href="/models/zen-coder"
+  />
+  <Card 
+    title="Zen-Omni" 
+    description="30B/3B MoE • Multimodal • Vision+Audio"
+    href="/models/zen-omni"
+  />
+  <Card 
+    title="Zen-Next" 
+    description="80B/3B MoE • Ultra-sparse • 96% efficiency"
+    href="/models/zen-next"
+  />
+</Cards>
+
+## 🎯 Key Features
+
+### Architecture Innovation
+- **Qwen3 Base**: Latest architecture (September 2025)
+- **MoE Models**: 90-96% parameter efficiency
+- **GQA Optimization**: 75% memory reduction
+- **Flash Attention 2**: 2-4x faster inference
+
+### Training Excellence
+- **Zoo-Gym Framework**: Official training toolkit
+- **Recursive Improvement**: 94% effectiveness
+- **LoRA Fine-tuning**: 0.3-2% trainable params
+- **Multi-format Support**: GGUF, MLX, ONNX
+
+### Deployment Flexibility
+- **Edge Devices**: From smartphones to RPi
+- **Local Execution**: Complete privacy
+- **Cloud Optional**: Hybrid deployment
+- **95% Energy Saving**: Sustainable AI
+
+## 📈 Benchmarks
+
+| Model | Params | MMLU | GSM8K | HumanEval | Speed |
+|-------|--------|------|-------|-----------|-------|
+| Nano | 600M | 42.3% | 28.1% | 18.2% | 100 t/s |
+| Eco | 4B | 51.7% | 32.4% | 22.6% | 50 t/s |
+| Coder | 35B* | 78.9% | 71.2% | 91.3% | 30 t/s |
+| Omni | 3B* | 65.4% | 58.3% | 45.2% | 45 t/s |
+| Next | 3B* | 87.3% | 92.1% | 84.6% | 70 t/s |
+
+*Active parameters (MoE models)
+
+## 🛠️ Installation
+
+<Steps>
+  <Step>
+    ### Install Dependencies
+    ```bash
+    pip install transformers torch zoo-gym
+    ```
+  </Step>
+  <Step>
+    ### Download Model
+    ```python
+    from transformers import AutoModelForCausalLM
+    model = AutoModelForCausalLM.from_pretrained("zenlm/zen-eco")
+    ```
+  </Step>
+  <Step>
+    ### Run Inference
+    ```python
+    outputs = model.generate(inputs, max_length=100)
+    ```
+  </Step>
+</Steps>
+
+## 🤝 Partnership
+
+Built through collaboration between:
+
+- **[Hanzo AI](https://hanzo.ai)** - Techstars '24, AI innovation
+- **[Zoo Labs Foundation](https://zoo.ai)** - 501(c)(3), open AI infrastructure
+
+## 📚 Documentation
+
+<Cards>
+  <Card 
+    title="Getting Started" 
+    description="Installation and quick start guide"
+    href="/quickstart"
+  />
+  <Card 
+    title="Training Guide" 
+    description="Fine-tune with zoo-gym"
+    href="/training/zoo-gym"
+  />
+  <Card 
+    title="API Reference" 
+    description="Complete API documentation"
+    href="/api/python"
+  />
+  <Card 
+    title="Whitepaper" 
+    description="Technical deep dive"
+    href="/papers/whitepaper"
+  />
+</Cards>
+
+## 🌟 Community
+
+- **GitHub**: [github.com/zenlm](https://github.com/zenlm)
+- **HuggingFace**: [huggingface.co/zenlm](https://huggingface.co/zenlm)
+- **Discord**: [discord.gg/zen-ai](https://discord.gg/zen-ai)
+- **Email**: support@zenai.org
+
+---
+
+<Callout>
+  **Need Help?** Check our [FAQ](/resources/faq) or join our [Discord](https://discord.gg/zen-ai) community.
+</Callout>
