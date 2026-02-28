@@ -1,0 +1,95 @@
+\documentclass[11pt,twocolumn]{article}
+
+% Required packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{subcaption}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% Page layout
+\usepackage[margin=1in]{geometry}
+\setlength{\columnsep}{0.25in}
+
+% Header and footer
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Zen AI Model Family: Efficient Edge Deployment}
+\fancyhead[R]{2025}
+\fancyfoot[C]{\thepage}
+
+% Title information
+\title{\textbf{Zen AI Model Family: Efficient Edge Deployment of 4B Parameter Models with 70B-Class Performance}}
+
+\author{
+Zen Research Team\\
+Hanzo AI\\
+\texttt{\{research\}@hanzo.ai}
+}
+
+\date{\today}
+
+% Custom commands
+\newcommand{\zen}{\textsc{Zen}}
+\newcommand{\zennano}{\textsc{Zen-nano}}
+\newcommand{\zenomni}{\textsc{Zen-omni}}
+\newcommand{\zencoder}{\textsc{Zen-coder}}
+
+% Code listing settings
+\lstset{
+  basicstyle=\footnotesize\ttfamily,
+  commentstyle=\color{gray},
+  keywordstyle=\color{blue},
+  stringstyle=\color{red},
+  frame=single,
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=2
+}
+
+\begin{document}
+
+\maketitle
+
+% Abstract
+\input{sections/abstract}
+
+% Keywords
+\textbf{Keywords:} Edge AI, Model Compression, Privacy-Preserving AI, Efficient Transformers, Local Deployment, Sustainable AI
+
+% Main content sections
+\input{sections/introduction}
+
+% Note: Additional sections would be included here
+% \input{sections/related_work}
+% \input{sections/methodology}
+% \input{sections/architecture}
+% \input{sections/experiments}
+% \input{sections/results}
+% \input{sections/analysis}
+% \input{sections/discussion}
+% \input{sections/conclusion}
+
+% Bibliography
+\bibliographystyle{ieeetr}
+\bibliography{references}
+
+% Appendices (if needed)
+% \appendix
+% \input{sections/appendix_a}
+
+\end{document}

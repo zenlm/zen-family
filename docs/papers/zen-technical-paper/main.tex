@@ -1,0 +1,72 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{float}
+\usepackage{subfigure}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\title{Zen: Ultra-Efficient Language Models for\\Local Deployment and Privacy Preservation\\
+{\footnotesize \textsuperscript{*}Technical Report v1.0.1}
+}
+
+\author{\IEEEauthorblockN{Hanzo AI Research Team\textsuperscript{1} \and Zoo Labs Foundation\textsuperscript{2}}
+\IEEEauthorblockA{\textsuperscript{1}Hanzo AI (Techstars '24)\\
+Email: research@hanzo.ai}
+\IEEEauthorblockA{\textsuperscript{2}Zoo Labs Foundation (501(c)(3))\\
+Email: foundation@zoo.ai}
+}
+
+\maketitle
+
+\input{sections/abstract}
+
+\section{Introduction}
+\input{sections/introduction}
+
+\section{Related Work}
+\input{sections/related_work}
+
+\section{Architecture}
+\input{sections/architecture}
+
+\section{Training Methodology}
+\input{sections/methodology}
+
+\section{Experimental Results}
+\input{sections/results}
+
+\section{Ablation Studies}
+\input{sections/ablation}
+
+\section{Discussion}
+\input{sections/discussion}
+
+\input{sections/conclusion}
+
+\section*{References}
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\appendix
+\section{Implementation Details}
+\input{sections/appendix_implementation}
+
+\section{Hyperparameter Configurations}
+\input{sections/appendix_hyperparameters}
+
+\section{Benchmark Protocols}
+\input{sections/appendix_benchmarks}
+
+\end{document}
