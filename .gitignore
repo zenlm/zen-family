@@ -19,3 +19,7 @@ archive/
 docs/papers/papers/
 docs/papers/pdf/
 docs/papers/pdfs/
+
+# Training data (stored on HuggingFace, not in git)
+*.jsonl
+training/data/
