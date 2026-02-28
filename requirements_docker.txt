@@ -1,0 +1,16 @@
+# Core dependencies for Docker deployment
+torch>=2.0.0
+transformers>=4.40.0
+accelerate>=0.30.0
+datasets>=2.0.0
+huggingface-hub>=0.20.0
+peft>=0.10.0
+sentencepiece>=0.2.0
+protobuf>=3.20.0
+safetensors>=0.4.0
+
+# API dependencies
+fastapi==0.115.0
+uvicorn[standard]==0.32.0
+pydantic==2.9.2
+python-multipart==0.0.12

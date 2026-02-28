@@ -7,3 +7,15 @@ QWEN.md
 *.gguf
 *.pt
 *.pth
+
+# Model directories (use HuggingFace)
+models/
+modelfiles/*/
+
+# Generated/temp files
+*.log
+*.tmp
+archive/
+docs/papers/papers/
+docs/papers/pdf/
+docs/papers/pdfs/
