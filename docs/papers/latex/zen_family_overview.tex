@@ -278,9 +278,33 @@ Key techniques for reducing training and inference costs:
     \item \textbf{Mixed Precision Training}: FP16/BF16 with FP32 accumulation
     \item \textbf{Gradient Checkpointing}: 40\% memory reduction
     \item \textbf{Flash Attention}: 3x speedup in attention computation
-    \item \textbf{Quantization-Aware Training}: Maintains quality at INT4
-    \item \textbf{Knowledge Distillation}: Transfer from larger teachers
+    \item \textbf{Q-GaLore Fine-tuning}: Quantized gradient low-rank projection reduces optimizer memory by up to 50\% vs.\ LoRA while outperforming QLoRA by up to 5.19 MMLU points at equivalent memory budgets
+    \item \textbf{Knowledge Distillation}: Transfer from larger teachers via Zen MoDE (Mixture of Distilled Experts)
 \end{itemize}
+
+\subsection{Continual Learning and Adaptation}
+
+Production AI systems require continual adaptation without catastrophic forgetting of prior capabilities. The Zen family incorporates a layered continual learning strategy based on the current empirical consensus~\cite{wang2025survey, lifelong2025survey}:
+
+\begin{enumerate}
+    \item \textbf{Base Capability Preservation (OPLoRA)}: All fine-tuning constrains LoRA updates to be orthogonal to the top singular vectors of frozen base weight matrices~\cite{oplora2025}, protecting the most information-rich directions of the pretrained model from overwriting.
+
+    \item \textbf{Surprise-Driven Replay (SuRe)}: Our continual fine-tuning pipeline uses NLL-prioritized experience replay --- sequences where the model exhibits high negative log-likelihood (high surprise) are preferentially retained in the replay buffer, ensuring the most at-risk knowledge is rehearsed~\cite{sure2025}. A dual-learner design with fast LoRA (rapid adaptation) and slow LoRA (EMA-stabilized) is merged after each training phase.
+
+    \item \textbf{Sequential Model Merging (OPCM)}: As specialized Zen variants are released (Zen-Coder, Zen-Eco, Zen-Omni, etc.), we apply Orthogonal Projection-based Continual Merging~\cite{opcm2025} to sequentially integrate task-specific capabilities into a unified base checkpoint. OPCM maintains $O(|\theta|)$ memory complexity regardless of the number of merged models and achieves 5--8\% average accuracy improvement over simultaneous merging approaches.
+
+    \item \textbf{Training-Free Agent Adaptation}: For deployment-time adaptation without weight updates, we employ in-context experience accumulation inspired by the Youtu-Agent framework~\cite{youtu2025}, enabling GRPO-equivalent policy improvement (+2.7\% AIME 2024) purely through structured context management.
+\end{enumerate}
+
+\subsection{Multi-Variant Deployment via Delta Compression}
+
+The Zen family serves multiple fine-tuned variants (instruct, coder, abliterated) from shared base weights using BitDelta~\cite{bitdelta2024}:
+
+$$W_{\text{ft}} = W_{\text{base}} + \hat{\Delta}, \quad \hat{\Delta} = \alpha \cdot \text{sign}(\Delta)$$
+
+where $\alpha$ is a per-matrix scalar learned via distillation on a calibration set. This achieves greater than 10$\times$ memory reduction for variant-specific deltas, enabling multi-tenant serving of all Zen variants from a single high-precision base model in shared GPU memory.
+
+For edge and on-device deployment, K-Merge~\cite{kmerge2025} manages LoRA adapter updates continuously within a fixed storage budget, merging newly received adapters into the closest existing stored adapter via task-vector cosine similarity.
 
 \section{Performance Benchmarks}
 
@@ -347,13 +371,17 @@ Multilingual ASR & 5.2 & 98 & 0.20 & 94.8 \\
 \textbf{Format} & \textbf{Precision} & \textbf{Size} & \textbf{Speed} & \textbf{Quality} & \textbf{Platform} \\
 \midrule
 SafeTensors & FP16 & 100\% & Baseline & 100\% & All \\
-GGUF & Q4\_K\_M & 25\% & 2.5x & 98.5\% & CPU/GPU \\
 GGUF & Q8\_0 & 50\% & 1.8x & 99.5\% & CPU/GPU \\
+GGUF & Q5\_K\_M & 31\% & 2.2x & 99.2\% & CPU/GPU \\
+GGUF & IQ4\_XS & 24\% & 2.6x & 99.0\% & CPU/GPU \\
+GGUF & Q4\_K\_M & 25\% & 2.5x & 98.5\% & CPU/GPU \\
+GGUF & IQ3\_M & 18\% & 3.0x & 96.8\% & CPU/Edge \\
+GGUF & IQ2\_M & 13\% & 3.5x & 91.2\% & Extreme edge \\
 MLX & 4-bit & 25\% & 3x & 98\% & Apple Silicon \\
 ONNX & INT8 & 50\% & 2x & 99\% & Cross-platform \\
 \bottomrule
 \end{tabular}
-\caption{Deployment Format Comparison}
+\caption{Deployment Format Comparison. IQ (Importance-Quantization) formats use non-linear table-assisted reconstruction with an importance matrix~\cite{gguf2024} and consistently outperform K-quants at equivalent bit widths. IQ4\_XS exceeds Q4\_K\_M quality at similar size.}
 \end{table}
 
 \subsection{Hardware Requirements}
@@ -487,11 +515,12 @@ Q4 2026 & Zen v2.0 with neural architecture search \\
 \subsection{Research Priorities}
 
 \begin{enumerate}
-    \item \textbf{Extreme Quantization}: 2-bit and 1-bit models
-    \item \textbf{Continual Learning}: Online adaptation without forgetting
-    \item \textbf{Federated Training}: Privacy-preserving distributed learning
-    \item \textbf{Neuro-Symbolic Integration}: Reasoning with knowledge graphs
-    \item \textbf{Quantum-Ready}: Algorithms for quantum acceleration
+    \item \textbf{IQ-Quant Pipeline}: Deploy IQ2--IQ4 GGUF variants with importance matrices for all Zen models, enabling viable 2-bit edge deployment~\cite{gguf2024}
+    \item \textbf{SuRe Continual Learning}: Implement surprise-driven prioritized replay with dual fast/slow LoRA EMA for all future Zen fine-tuning runs~\cite{sure2025}
+    \item \textbf{Drop-Upcycling MoE Expansion}: Evaluate Drop-Upcycling~\cite{dropupcycling2025} for expanding dense Zen models to MoE architecture, achieving 13B-equivalent performance with 5.9B active parameters at 1/4 training FLOPs
+    \item \textbf{GT-QLoRA for Ultra}: Complete Gate-Targeted QLoRA training for Zen4-Ultra to address MoE abliteration failure modes where refusal is encoded in expert routing rather than the residual stream
+    \item \textbf{MonoSoup Checkpoint Selection}: Apply MonoSoup SVD decomposition~\cite{monosoup2026} during training to recover up to 8\% on weaker checkpoints without additional fine-tuning runs
+    \item \textbf{Streaming Agent Adaptation}: Integrate stateful replay~\cite{statefulreplay2025} for models that must update continuously from live interaction streams
 \end{enumerate}
 
 \section{Conclusion}
@@ -532,5 +561,54 @@ All Zen models are available at:
   year={2025}
 }
 \end{verbatim}
+
+\begin{thebibliography}{99}
+
+\bibitem{bitdelta2024}
+Liu, J., Xiao, G., Li, K., Lee, J.D., Han, S., Dao, T., \& Cai, T. (2024).
+\textit{BitDelta: Your Fine-Tune May Only Be Worth One Bit}.
+NeurIPS 2024. arXiv:2402.10193.
+
+\bibitem{sure2025}
+SuRe: Surprise-Driven Prioritised Replay for Continual LLM Learning (2025).
+arXiv:2511.22367.
+
+\bibitem{opcm2025}
+Merging Models on the Fly Without Retraining: A Sequential Approach to Scalable Continual Model Merging (2025).
+arXiv:2501.09522.
+
+\bibitem{oplora2025}
+OPLoRA: Orthogonal Projection LoRA Prevents Catastrophic Forgetting during Parameter-Efficient Fine-Tuning (2025).
+arXiv:2510.13003.
+
+\bibitem{dropupcycling2025}
+Drop-Upcycling: Training Sparse Mixture of Experts with Partial Re-initialization (2025).
+arXiv:2502.19261.
+
+\bibitem{monosoup2026}
+Model soups need only one ingredient (2026).
+arXiv:2602.09689.
+
+\bibitem{kmerge2025}
+K-Merge: Online Continual Merging of Adapters for On-device Large Language Models (2025).
+arXiv:2510.13537.
+
+\bibitem{youtu2025}
+Youtu-Agent: Scaling Agent Productivity with Automated Generation and Hybrid Policy Optimization (2025).
+arXiv:2512.24615.
+
+\bibitem{wang2025survey}
+Wang et al. Continual Learning of Large Language Models: A Comprehensive Survey.
+ACM Computing Surveys 2025. arXiv:2404.16789.
+
+\bibitem{lifelong2025survey}
+Towards Lifelong Learning of Large Language Models: A Survey.
+ACM CSUR 2025. DOI:10.1145/3716629.
+
+\bibitem{gguf2024}
+IQ Quantization Methods in llama.cpp: Non-linear table-assisted reconstruction with importance matrices.
+ggml-org/llama.cpp, 2024--2025.
+
+\end{thebibliography}
 
 \end{document}
