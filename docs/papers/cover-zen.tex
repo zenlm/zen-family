@@ -1,0 +1,38 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{paperwidth=8.5in,paperheight=11in,margin=0in}
+\usepackage{tikz}
+\usepackage{xcolor}
+
+\pagestyle{empty}
+
+\begin{document}
+\begin{tikzpicture}[remember picture,overlay]
+  \fill[black] (current page.south west) rectangle (current page.north east);
+
+  \node[anchor=center,text=white,font=\fontsize{42}{50}\selectfont\bfseries,text width=14cm,align=center]
+    at ([yshift=3cm]current page.center) {ZEN LM};
+
+  \node[anchor=center,text=white!60,font=\fontsize{16}{20}\selectfont,text width=14cm,align=center]
+    at ([yshift=1.2cm]current page.center) {Frontier Open-Weight Language Models};
+
+  \draw[white!30,line width=0.5pt] ([yshift=-0.2cm,xshift=-5cm]current page.center) -- ([yshift=-0.2cm,xshift=5cm]current page.center);
+
+  \node[anchor=center,text=white!50,font=\fontsize{12}{14}\selectfont]
+    at ([yshift=-1.2cm]current page.center) {Zach Kelling};
+
+  \node[anchor=center,text=white!35,font=\fontsize{10}{12}\selectfont]
+    at ([yshift=-2cm]current page.center) {Zen LM / Zoo Labs Foundation};
+
+  \node[anchor=center,text=white!20,font=\fontsize{9}{11}\selectfont]
+    at ([yshift=-3.2cm]current page.center) {April 2026};
+
+  \node[anchor=south,text=white!25,font=\fontsize{8}{10}\selectfont,text width=14cm,align=center]
+    at ([yshift=2cm]current page.south) {Mixture of Diverse Experts \quad $\cdot$ \quad 600M--480B Parameters \quad $\cdot$ \quad Qwen3+ Architecture};
+
+  \node[anchor=south east,text=white!20,font=\fontsize{7}{9}\selectfont]
+    at ([xshift=-1cm,yshift=0.8cm]current page.south east) {CONFIDENTIAL};
+\end{tikzpicture}
+\end{document}
