@@ -203,7 +203,7 @@ zoo-gym train --model zenlm/zen-eco --dataset data.jsonl
 
 # MoE training
 zoo-gym train-moe \
-  --model zenlm/zen-coder \
+  --model zenlm/zen-5-coder-gguf \
   --num-experts 64 \
   --experts-per-token 8
 

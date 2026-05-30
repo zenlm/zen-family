@@ -1,7 +1,7 @@
 # Zen AI Architecture Reference Guide
 ## Updated: September 25, 2025
 
-This document provides comprehensive technical specifications for all Zen AI models using the latest Qwen3 architectures. This reference is essential for developers working with our models and should be included in all training datasets.
+This document provides comprehensive technical specifications for all Zen AI models using the latest architectures. This reference is essential for developers working with our models and should be included in all training datasets.
 
 ---
 
@@ -21,7 +21,7 @@ As of September 25, 2025, the Zen AI ecosystem consists of five primary architec
 
 ## 📊 Detailed Architecture Specifications
 
-### Zen-Nano (Qwen3-0.6B)
+### Zen-Nano (-0.6B)
 **Ultra-Efficient Edge Model**
 
 ```yaml
@@ -52,7 +52,7 @@ Attention: Multi-Head Self-Attention
 - Mobile applications
 - Embedded systems
 
-### Zen-Eco (Qwen3-4B)
+### Zen-Eco (-4B)
 **Balanced Performance Model**
 
 ```yaml
@@ -82,7 +82,7 @@ Rope Theta: 1,000,000
 - 2GB memory with INT4 quantization
 - 4GB memory with INT8 quantization
 
-### Zen-Coder (Qwen3-Coder-480B-A35B)
+### Zen-Coder (-Coder-480B-A35B)
 **Massive MoE for Code Generation**
 
 ```yaml
@@ -120,7 +120,7 @@ Load Balancing: Yes (coefficient 0.01)
 - 150+ programming languages
 - Syntax-aware tokenization
 
-### Zen-Omni (Qwen3-Omni-30B-A3B)
+### Zen-Omni (-Omni-30B-A3B)
 **Multimodal MoE Model**
 
 ```yaml
@@ -148,7 +148,7 @@ Modality Tokens: <image>, <audio>, <video>
 - 8 experts: Text processing
 - 8 experts: Cross-modal reasoning
 
-### Zen-Next (Qwen3-Next-80B-A3B)
+### Zen-Next (-Next-80B-A3B)
 **Ultra-Sparse MoE for Maximum Efficiency**
 
 ```yaml
@@ -260,7 +260,7 @@ response = tokenizer.decode(outputs[0])
 ```python
 # For Zen-Coder, Zen-Omni, Zen-Next
 model = AutoModelForCausalLM.from_pretrained(
-    "zenlm/zen-coder",
+    "zenlm/zen-5-coder-gguf",
     device_map="auto",
     torch_dtype=torch.bfloat16,
     # MoE specific
