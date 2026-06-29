@@ -1,3 +1,5 @@
+<p align="center"><img src=".github/hero.svg" alt="zen-family" width="880"></p>
+
 # The Zen AI Model Family
 
 ![Zen AI](https://img.shields.io/badge/Zen%20AI-10%20Models-blue)
