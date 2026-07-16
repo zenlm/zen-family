@@ -3,3 +3,6 @@ Copyright 2025-2026 Zen Authors
 
 Licensed under the Apache License, Version 2.0.
 Developed by the Zen Authors (https://zenlm.org).
+
+Fine-tuned from Qwen3-8B (Alibaba Cloud, Qwen team), licensed under the Apache License, Version 2.0.
+Upstream: https://huggingface.co/Qwen/Qwen3-8B
